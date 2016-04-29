@@ -16,6 +16,9 @@ layout: docs
 <ul>
 <li><a href="#sec-4-2-1">4.2.1. config.json</a></li>
 <li><a href="#sec-4-2-2">4.2.2. index.js</a></li>
+<li><a href="#sec-4-2-3">4.2.3. download.js</a></li>
+<li><a href="#sec-4-2-4">4.2.4. invoice.js</a></li>
+<li><a href="#sec-4-2-5">4.2.5. AWS Lambda Policy</a></li>
 </ul>
 </li>
 </ul>
@@ -25,10 +28,11 @@ layout: docs
 <li><a href="#sec-5-1">5.1. Webpage</a></li>
 <li><a href="#sec-5-2">5.2. JavaScript</a>
 <ul>
-<li><a href="#sec-5-2-1">5.2.1. js/config.js</a></li>
+<li><a href="#sec-5-2-1">5.2.1. js/creds.js</a></li>
 <li><a href="#sec-5-2-2">5.2.2. js/serverless-ecommerce.js</a></li>
 </ul>
 </li>
+<li><a href="#sec-5-3">5.3. Angular2</a></li>
 </ul>
 </li>
 <li><a href="#sec-6">6. Download</a></li>
@@ -169,19 +173,20 @@ The AWS Lambda function does the following:
 <div class="outline-text-4" id="text-4-2-1">
 <div class="org-src-container">
 
-<pre class="src src-js">{
-  "STORE_TABLE": "AcksinStoreTransactions",
-  "STRIPE_SECRET_KEY": "sk_test_E018BTiHuKj6TmvUNWrL4Ue3",
-  "EMAIL_FROM": "hey@acksin.com"
-  "PRODUCTS": {
-    "ServerlessExampleBook": {
-      "name": "Serverless Example Book",
-      "amount": 1400,
-      "downloadLink": {
-	 "s3Bucket": "assets",
-	 "s3Key": "foo/bar/book.pdf"
-      }
-  }
+<pre class="src src-json">{
+    "STORE_TABLE": "AcksinStoreTransactions",
+    "STRIPE_SECRET_KEY": "sk_test_E018BTiHuKj6TmvUNWrL4Ue3",
+    "EMAIL_FROM": "hey@acksin.com",
+    "PRODUCTS": {
+	"ServerlessExampleBook": {
+	    "name": "Serverless Example Book",
+	    "amount": 1400,
+	    "downloadLink": {
+		"s3Bucket": "assets",
+		"s3Key": "foo/bar/book.pdf"
+	    }
+	}
+    }
 }
 </pre>
 </div>
@@ -284,8 +289,96 @@ exports.handler = function(event, context) {
 }
 </pre>
 </div>
+</div>
+</div>
 
+<div id="outline-container-sec-4-2-3" class="outline-4">
+<h4 id="sec-4-2-3"><span class="section-number-4">4.2.3</span> download.js</h4>
+<div class="outline-text-4" id="text-4-2-3">
+<div class="org-src-container">
 
+<pre class="src src-js">var AWS = require('aws-sdk');
+
+var s3 = new AWS.S3();
+
+exports.getDownloadLink = function(existingLink, fn) {
+    var params = {
+	Bucket: existingLink.s3Bucket,
+	Key: existingLink.s3Key,
+	Expires: 259200 // 3 day link.
+    };
+
+    s3.getSignedUrl('putObject', params, fn);
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-4-2-4" class="outline-4">
+<h4 id="sec-4-2-4"><span class="section-number-4">4.2.4</span> invoice.js</h4>
+<div class="outline-text-4" id="text-4-2-4">
+<div class="org-src-container">
+
+<pre class="src src-js">var AWS = require('aws-sdk');
+
+var ses = new AWS.SES();
+
+exports.sendInvoiceEmail = function(email, product, downloadLink) {
+    ses.sendEmail({
+	Source: config.FROM_EMAIL,
+	Destination: {
+	    ToAddresses: [
+		email
+	    ],
+	    BccAddresses: [
+		config.FROM_EMAIL
+	    ]
+	},
+	Message: {
+	    Subject: {
+		Data: "Acksin Purchase Confirmation"
+	    },
+	    Body: {
+		// Html: {
+		//     Data: '&lt;html&gt;&lt;head&gt;'
+		//         + '&lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /&gt;'
+		//         + '&lt;title&gt;Acksin Purchase Confirmation&lt;/title&gt;'cksin
+		//         + '&lt;/head&gt;&lt;body&gt;'
+		//         + 'Please &lt;a href="' + verificationLink + '"&gt;click here to verify your email address&lt;/a&gt; or copy &amp; paste the following link in a browser:'
+		//         + '&lt;br&gt;&lt;br&gt;'
+		//         + '&lt;a href="' + verificationLink + '"&gt;' + verificationLink + '&lt;/a&gt;'
+		//         + '&lt;/body&gt;&lt;/html&gt;'
+		Text: {
+		    Data: "Acksin Purchase Confirmation\n"
+			+ ""
+			+ "Product: " + product.name
+			+ "\n"
+			+ "Amount Billed: " + product.amount / 100.0
+			+ "\n"
+			+ "Download Link: " + downloadLink
+			+ "\n\n\n"
+			+ "Thank You.\n\n"
+			+ "Acksin Team"
+		}
+	    }
+	}
+    }, function(err, data) {
+	if(err) {
+	    console.log(err, err.stack); // an error occurred
+	} else {
+	    console.log(data);           // successful response
+	}
+    });
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-4-2-5" class="outline-4">
+<h4 id="sec-4-2-5"><span class="section-number-4">4.2.5</span> AWS Lambda Policy</h4>
+<div class="outline-text-4" id="text-4-2-5">
 <p>
 Here is the Policy file that we need to attach to the function. As
 always replace <code>YOUR_AWS_ACCOUNT_NUMBER=</code> with your AWS Account
@@ -321,7 +414,6 @@ number.
 </div>
 </div>
 </div>
-
 
 <div id="outline-container-sec-5" class="outline-2">
 <h2 id="sec-5"><span class="section-number-2">5</span> Website</h2>
@@ -449,13 +541,13 @@ in.
 
 
 <div id="outline-container-sec-5-2-1" class="outline-4">
-<h4 id="sec-5-2-1"><span class="section-number-4">5.2.1</span> js/config.js</h4>
+<h4 id="sec-5-2-1"><span class="section-number-4">5.2.1</span> js/creds.js</h4>
 <div class="outline-text-4" id="text-5-2-1">
 <div class="org-src-container">
 
 <pre class="src src-js">AWS.config = new AWS.Config({
-    accessKeyId: 'AKIAI7WASESAC5ZKUXIQ',  // Change to your ACCESS_KEY_FOR_IAM_USER
-    secretAccessKey: 'PAFLB4/2TWTR+U//+WTRkLMA+sdlFvn/U1OOsEKI', // Change to your SECRET_KEY_FOR_IAM_USER
+    accessKeyId: '',  // Change to your ACCESS_KEY_FOR_IAM_USER
+    secretAccessKey: '', // Change to your SECRET_KEY_FOR_IAM_USER
     region: 'us-west-2'
 });
 
@@ -522,8 +614,13 @@ var PurchaseLambdaFunction = 'acksin_store_example-dev';
 })
 </pre>
 </div>
+</div>
+</div>
+</div>
 
-
+<div id="outline-container-sec-5-3" class="outline-3">
+<h3 id="sec-5-3"><span class="section-number-3">5.3</span> Angular2</h3>
+<div class="outline-text-3" id="text-5-3">
 <div class="org-src-container">
 
 <pre class="src src-js">import {Component, Input} from 'angular2/core';
@@ -548,59 +645,59 @@ interface Product {
     selector: 'acksin-purchase',
     template: `
 &lt;div [hidden]="paymentFormHidden"&gt;
-   &lt;form action="" method="POST" id="payment-form"&gt;
-     &lt;!-- We will be checking for this in the function --&gt;
+&lt;form action="" method="POST" id="payment-form"&gt;
+&lt;!-- We will be checking for this in the function --&gt;
 
-     &lt;div class="form-group"&gt;
-       &lt;label&gt;Product&lt;/label&gt;
-       &lt;div *ngFor="#i of purchaseChoices"&gt;
-	 &lt;input type="radio" name="product" (click)="updateProduct(i.key)" /&gt; {{i.name}} - \${{i.amount}}
-       &lt;/div&gt;
-     &lt;/div&gt;
+&lt;div class="form-group"&gt;
+&lt;label&gt;Product&lt;/label&gt;
+&lt;div *ngFor="#i of purchaseChoices"&gt;
+&lt;input type="radio" name="product" (click)="updateProduct(i.key)" /&gt; {{i.name}} - \${{i.amount}}
+&lt;/div&gt;
+&lt;/div&gt;
 
-     &lt;div class="form-group"&gt;
-       &lt;label&gt;
-	 &lt;label&gt;Email&lt;/label&gt;
-	 &lt;input type="email" name="email" value="" class="form-control" [(ngModel)]="purchaseForm.email" /&gt;
-       &lt;/label&gt;
-     &lt;/div&gt;
+&lt;div class="form-group"&gt;
+&lt;label&gt;
+&lt;label&gt;Email&lt;/label&gt;
+&lt;input type="email" name="email" value="" class="form-control" [(ngModel)]="purchaseForm.email" /&gt;
+&lt;/label&gt;
+&lt;/div&gt;
 
-     &lt;div class="form-group"&gt;
-       &lt;label&gt;
-	 &lt;label&gt;Card Number&lt;/label&gt;
-	 &lt;input type="text" size="20" data-stripe="number"  class="form-control" [(ngModel)]="cardNumber" /&gt;
-       &lt;/label&gt;
-     &lt;/div&gt;
+&lt;div class="form-group"&gt;
+&lt;label&gt;
+&lt;label&gt;Card Number&lt;/label&gt;
+&lt;input type="text" size="20" data-stripe="number"  class="form-control" [(ngModel)]="cardNumber" /&gt;
+&lt;/label&gt;
+&lt;/div&gt;
 
-     &lt;div class="form-group"&gt;
-       &lt;label&gt;
-	 &lt;label&gt;CVC&lt;/label&gt;
-	 &lt;input type="text" size="4" data-stripe="cvc" class="form-control"  [(ngModel)]="cvc" /&gt;
-       &lt;/label&gt;
-     &lt;/div&gt;
+&lt;div class="form-group"&gt;
+&lt;label&gt;
+&lt;label&gt;CVC&lt;/label&gt;
+&lt;input type="text" size="4" data-stripe="cvc" class="form-control"  [(ngModel)]="cvc" /&gt;
+&lt;/label&gt;
+&lt;/div&gt;
 
-     &lt;div class="form-group input-group"&gt;
-       &lt;label&gt;Expiration (MM/YYYY)&lt;/label&gt;
-       &lt;br&gt;
-       &lt;input type="text" size="2" data-stripe="exp-month"  [(ngModel)]="expMonth" /&gt;
-       &lt;span&gt; / &lt;/span&gt;
-       &lt;input type="text" size="4" data-stripe="exp-year"  [(ngModel)]="expYear" /&gt;
-     &lt;/div&gt;
+&lt;div class="form-group input-group"&gt;
+&lt;label&gt;Expiration (MM/YYYY)&lt;/label&gt;
+&lt;br&gt;
+&lt;input type="text" size="2" data-stripe="exp-month"  [(ngModel)]="expMonth" /&gt;
+&lt;span&gt; / &lt;/span&gt;
+&lt;input type="text" size="4" data-stripe="exp-year"  [(ngModel)]="expYear" /&gt;
+&lt;/div&gt;
 
-     &lt;div class="form-group"&gt;
-     &lt;label class="payment-errors"&gt;{{paymentErrors}}&lt;/label&gt;
-     &lt;/div&gt;
+&lt;div class="form-group"&gt;
+&lt;label class="payment-errors"&gt;{{paymentErrors}}&lt;/label&gt;
+&lt;/div&gt;
 
-     &lt;button (click)="submit()" [disabled]="disabledForm" type="submit" class="btn btn-success"&gt;Purchase&lt;/button&gt;
-   &lt;/form&gt;
- &lt;/div&gt;
+&lt;button (click)="submit()" [disabled]="disabledForm" type="submit" class="btn btn-success"&gt;Purchase&lt;/button&gt;
+&lt;/form&gt;
+&lt;/div&gt;
 
- &lt;div [(hidden)]="downloadBoxHidden"&gt;
-   &lt;a [(href)]="downloadLink"&gt;Download&lt;/a&gt;
- &lt;/div&gt;
+&lt;div [(hidden)]="downloadBoxHidden"&gt;
+&lt;a [(href)]="downloadLink"&gt;Download&lt;/a&gt;
+&lt;/div&gt;
 
- &lt;p&gt;{{response}}&lt;/p&gt;`
- })
+&lt;p&gt;{{response}}&lt;/p&gt;`
+})
 export class AcksinPurchase {
     // Modify this to create more produts.
     products: { [id: string]: Product[]; } = {
@@ -697,7 +794,6 @@ export class AcksinPurchase {
     }
 }
 </pre>
-</div>
 </div>
 </div>
 </div>

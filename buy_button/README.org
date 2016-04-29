@@ -52,23 +52,7 @@
    To do this you need to create an IAM Policy that can then be attached
    to a new IAM user. This is the policy document:
 
-   #+begin_src json
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "Stmt1458602899000",
-            "Effect": "Allow",
-            "Action": [
-                "lambda:InvokeFunction"
-            ],
-            "Resource": [
-                "arn:aws:lambda:us-west-2:451305228097:function:acksin_store_example-dev"
-            ]
-        }
-    ]
-}
-   #+end_src
+   #+INCLUDE: IAMRole.json src json
 
 * Backend
 
@@ -89,220 +73,27 @@
 
 *** config.json
 
-     #+begin_src js :tangle source/examples/serverless-ecommerce/config.json.example
-{
-  "STORE_TABLE": "AcksinStoreTransactions",
-  "STRIPE_SECRET_KEY": "sk_test_E018BTiHuKj6TmvUNWrL4Ue3",
-  "EMAIL_FROM": "hey@acksin.com"
-  "PRODUCTS": {
-    "ServerlessExampleBook": {
-      "name": "Serverless Example Book",
-      "amount": 1400,
-      "downloadLink": {
-         "s3Bucket": "assets",
-         "s3Key": "foo/bar/book.pdf"
-      }
-  }
-}
-     #+end_src
+#+INCLUDE: config.json.example src json
 
 *** index.js
 
-     #+begin_src js :tangle source/examples/serverless-ecommerce/index.js
-       console.log('Loading Acksin Store function');
+#+INCLUDE: index.js src js
 
-       // dependencies
-       var AWS = require('aws-sdk');
+*** download.js
 
-       // Get reference to AWS clients
-       var dynamodb = new AWS.DynamoDB();
+#+INCLUDE: download.js src js
 
-       // Link generator. Included in the Purchased version.
-       var download = require('./download.js');
+*** invoice.js
 
-       // Invoice email generator. Included in the Purchased version.
-       var invoice = require('./invoice.js');
+#+INCLUDE: invoice.js src js
 
-       var config = require('./config.json');
-
-       var stripe = require("stripe")(config.STRIPE_SECRET_KEY);
-
-       exports.handler = function(event, context) {
-           var stripeToken = event.stripeToken;
-           var email = event.email;
-           var product = event.product;
-
-           console.log("Received" + email + " " + product +  " " + stripeToken);
-
-           if(product in config.PRODUCTS) {
-               var amount = config.PRODUCTS[product].amount;
-
-               console.log(product + " is in our PRODUCTS");
-               console.log("" + amount + " is in our amount");
-
-               stripe.customers.create({
-                   source: stripeToken,
-                   description: email,
-               }).then(function(customer) {
-                   console.log("Creating the charge");
-
-                   return stripe.charges.create({
-                       amount: amount, // amount in cents, again
-                       currency: "usd",
-                       customer: customer.id
-                   });
-               }).then(function(charge) {
-                   console.log("Adding item to the Table: " + config.STORE_TABLE);
-
-                   // Generate a downloadLink to give the user.
-                   download.getDownloadLink(config.PRODUCTS[product].downloadLink, function(err, url) {
-                       dynamodb.putItem({
-                           TableName: config.STORE_TABLE,
-                           Item: {
-                               customerId: {
-                                   S: charge.customer
-                               },
-                               chargeId: {
-                                   S: charge.id
-                               },
-                               email: {
-                                   S: email
-                               },
-                               product: {
-                                   S: product
-                               },
-                               downloadLink: {
-                                   S: url
-                               },
-                               livemode: {
-                                   BOOL: charge.livemode
-                               }
-                           }
-                       }, function(err, data) {
-                           if(err != null) {
-                               console.log(err)
-                               context.fail();
-                           } else {
-                               console.log("success");
-
-                               invoice.sendInvoiceEmail(email, config.PRODUCTS[product], downloadLink);
-
-                               context.succeed({
-                                   downloadLink: url
-                               });
-                           }
-                       });
-                   });
-               });
-           } else {
-               context.fail();
-           }
-       }
-
-     #+end_src
-
-
-     #+begin_src js :tangle source/examples/serverless-ecommerce/download.js :exports none
-  var AWS = require('aws-sdk');
-
-  var s3 = new AWS.S3();
-
-  exports.getDownloadLink = function(existingLink, fn) {
-      var params = {
-          Bucket: existingLink.s3Bucket,
-          Key: existingLink.s3Key,
-          Expires: 259200 // 3 day link.
-      };
-
-      s3.getSignedUrl('putObject', params, fn);
-  }
-     #+end_src
-
-     #+begin_src js :tangle source/examples/serverless-ecommerce/invoice.js :exports none
-       var AWS = require('aws-sdk');
-
-       var ses = new AWS.SES();
-
-       exports.sendInvoiceEmail = function(email, product, downloadLink) {
-           ses.sendEmail({
-               Source: config.FROM_EMAIL,
-               Destination: {
-                   ToAddresses: [
-                       email
-                   ],
-                   BccAddresses: [
-                       config.FROM_EMAIL
-                   ]
-               },
-               Message: {
-                   Subject: {
-                       Data: "Acksin Purchase Confirmation"
-                   },
-                   Body: {
-                       // Html: {
-                       //     Data: '<html><head>'
-                       //         + '<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />'
-                       //         + '<title>Acksin Purchase Confirmation</title>'cksin
-                       //         + '</head><body>'
-                       //         + 'Please <a href="' + verificationLink + '">click here to verify your email address</a> or copy & paste the following link in a browser:'
-                       //         + '<br><br>'
-                       //         + '<a href="' + verificationLink + '">' + verificationLink + '</a>'
-                       //         + '</body></html>'
-                       Text: {
-                           Data: "Acksin Purchase Confirmation\n"
-                               + ""
-                               + "Product: " + product.name
-                               + "\n"
-                               + "Amount Billed: " + product.amount / 100.0
-                               + "\n"
-                               + "Download Link: " + downloadLink
-                               + "\n\n\n"
-                               + "Thank You.\n\n"
-                               + "Acksin Team"
-                       }
-                   }
-               }
-           }, function(err, data) {
-               if(err) {
-                   console.log(err, err.stack); // an error occurred
-               } else {
-                   console.log(data);           // successful response
-               }
-           });
-       }
-
-
-     #+end_src
-
+*** AWS Lambda Policy
 
      Here is the Policy file that we need to attach to the function. As
      always replace =YOUR_AWS_ACCOUNT_NUMBER== with your AWS Account
      number.
 
-     #+begin_src json :tangle source/examples/serverless-ecommerce/AcksinStoreExamplePolicy.json
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "PutItemToStoreTransactionsTable",
-            "Effect": "Allow",
-            "Action": [
-                "dynamodb:PutItem"
-            ],
-            "Resource": "arn:aws:dynamodb:us-west-2:451305228097:table/AcksinStoreTransactions"
-        },
-        {
-            "Sid": "",
-            "Resource": "*",
-            "Action": [
-                "logs:*"
-            ],
-            "Effect": "Allow"
-        }
-    ]
-}
-     #+end_src
-
+#+include: AcksinStoreExamplePolicy.json src json
 
 * Website
 
@@ -319,91 +110,7 @@
    =index.html=. As you can see we are including the AWS JS SDK which is
    what we are using to invoke our Lambda function.
 
-   #+begin_src html :tangle source/examples/serverless-ecommerce/www/index.html
- <!DOCTYPE html>
- <html lang="en">
-   <head>
-     <title>Acksin Serverless E-commerce with Stripe</title>
-
-     <!-- Bootstrap CSS and JS -->
-     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
-           rel="stylesheet"
-           integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
-           crossorigin="anonymous">
-     <script src="https://code.jquery.com/jquery-2.2.3.min.js"></script>
-     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
-             integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
-             crossorigin="anonymous"></script>
-
-     <!-- Include the AWS JS Library -->
-     <script src="https://sdk.amazonaws.com/js/aws-sdk-2.3.3.min.js"></script>
-     <!-- Include the Stripe JS Library -->
-     <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
-
-     <script src="./js/serverless-ecommerce.js"></script>
-   </head>
-
-   <body>
-     <div class="container">
-       <div class="row">
-         <div class="col-md-8">
-           <h1>Acksin DevOps Book Example</h1>
-           <p>This is an example DevOps book that you can probably
-             buy if we had written it. It is priced at <b>$14.00</b>
-             and we expect to get a link back to download it when
-             it's done. You can test the form
-             with <a href="https://stripe.com/docs/testing">these
-               numbers</a>.</p>
-
-           <p>
-             <form action="" method="POST" id="payment-form">
-               <!-- We will be checking for this in the function -->
-               <input type="hidden" name="product" value="ServerlessExampleBook" />
-               <input type="hidden" name="amount" value="1400" />
-
-               <div class="form-group">
-                 <label>
-                   <label>Email</label>
-                   <input type="email" name="email" value="" class="form-control"  />
-                 </label>
-               </div>
-
-               <label class="payment-errors"></label>
-
-               <div class="form-group">
-                 <label>
-                   <label>Card Number</label>
-                   <input type="text" size="20" data-stripe="number"  class="form-control" />
-                 </label>
-               </div>
-
-               <div class="form-group">
-                 <label>
-                   <label>CVC</label>
-                   <input type="text" size="4" data-stripe="cvc" class="form-control" />
-                 </label>
-               </div>
-
-               <div class="form-group input-group">
-                 <label>Expiration (MM/YYYY)</label>
-                 <br>
-                 <input type="text" size="2" data-stripe="exp-month" />
-                 <span> / </span>
-                 <input type="text" size="4" data-stripe="exp-year" />
-               </div>
-
-               <button type="submit" class="btn btn-primary">Submit Payment</button>
-             </form>
-           </p>
-         </div>
-
-         <div id="download-link"></div>
-       </div>
-     </div>
-     <!-- /.container -->
-   </body>
- </html>
-   #+end_src
+#+INCLUDE: www/index.html src html
 
 ** JavaScript
 
@@ -414,258 +121,30 @@
    in.
 
 
-*** js/config.js
+*** js/creds.js
 
-    #+begin_src js :tangle source/examples/serverless-ecommerce/www/js/serverless-ecommerce.js
- AWS.config = new AWS.Config({
-     accessKeyId: 'AKIAI7WASESAC5ZKUXIQ',  // Change to your ACCESS_KEY_FOR_IAM_USER
-     secretAccessKey: 'PAFLB4/2TWTR+U//+WTRkLMA+sdlFvn/U1OOsEKI', // Change to your SECRET_KEY_FOR_IAM_USER
-     region: 'us-west-2'
- });
-
- Stripe.setPublishableKey('pk_test_Wl3qsnArSjA9CLXwp8IKPTVm'); // Get a Stripe API key.
-
- var PurchaseLambdaFunction = 'acksin_store_example-dev';
-    #+end_src
+#+INCLUDE: www/js/creds.js src js
 
 *** js/serverless-ecommerce.js
 
-    #+begin_src js :tangle source/examples/serverless-ecommerce/www/js/serverless-ecommerce.js
- $(document).ready(function() {
-     $("#payment-form").submit(function() {
-         var $form = $(this);
+#+INCLUDE: www/js/serverless-ecommerce.js src js
 
-         // Disable the submit button to prevent repeated clicks
-         $form.find('button').prop('disabled', true);
+** Angular2
 
-         Stripe.card.createToken($form, function(status, response) {
-             var $form = $('#payment-form');
-
-             if (response.error) {
-                 // Show the errors on the form
-                 $form.find('.payment-errors').text(response.error.message);
-                 $form.find('button').prop('disabled', false);
-             } else {
-                 // response contains id and card, which contains additional card details
-                 var token = response.id;
-                 // Insert the token into the form so it gets submitted to the server
-                 $form.append($('<input type="hidden" name="stripeToken" />').val(token));
-
-                 var data = {};
-                 $form.serializeArray().map(function(x) {
-                     data[x.name] = x.value;
-                 });
-
-                 var lambda = new AWS.Lambda();
-                 lambda.invoke({
-                     FunctionName: PurchaseLambdaFunction,
-                     Payload: JSON.stringify(data)
-                 }, function(err, data) {
-                     if (err) {
-                         console.log(err, err.stack);
-                     } else {
-                         var output = JSON.parse(data.Payload);
-                         if (output != null && output.downloadLink) {
-                             $("#download-link").html("Download the file at " + output.downloadLink);
-                         } else {
-                             $("#download-link").html("Purchase Failed");
-                         }
-                     }
-                 });
-             }
-         });
-
-         // Prevent the form from submitting with the default action
-         return false;
-     })
- })
-    #+end_src
-
-
-    #+begin_src js :tangle source/examples/serverless-ecommerce/www/angular2/purchase-form.ts
-      import {Component, Input} from 'angular2/core';
-
-      declare var Stripe: any;
-
-      class class PurchaseForm {
-          constructor(
-              public email: string,
-              public product: string,
-              public stripeToken: string
-          ) { }
-      }
-
-      interface Product {
-          key: string;
-          name: string;
-          amount: string;
-      }
-
-      @Component({
-          selector: 'acksin-purchase',
-          template: `
-      <div [hidden]="paymentFormHidden">
-         <form action="" method="POST" id="payment-form">
-           <!-- We will be checking for this in the function -->
-
-           <div class="form-group">
-             <label>Product</label>
-             <div *ngFor="#i of purchaseChoices">
-               <input type="radio" name="product" (click)="updateProduct(i.key)" /> {{i.name}} - \${{i.amount}}
-             </div>
-           </div>
-
-           <div class="form-group">
-             <label>
-               <label>Email</label>
-               <input type="email" name="email" value="" class="form-control" [(ngModel)]="purchaseForm.email" />
-             </label>
-           </div>
-
-           <div class="form-group">
-             <label>
-               <label>Card Number</label>
-               <input type="text" size="20" data-stripe="number"  class="form-control" [(ngModel)]="cardNumber" />
-             </label>
-           </div>
-
-           <div class="form-group">
-             <label>
-               <label>CVC</label>
-               <input type="text" size="4" data-stripe="cvc" class="form-control"  [(ngModel)]="cvc" />
-             </label>
-           </div>
-
-           <div class="form-group input-group">
-             <label>Expiration (MM/YYYY)</label>
-             <br>
-             <input type="text" size="2" data-stripe="exp-month"  [(ngModel)]="expMonth" />
-             <span> / </span>
-             <input type="text" size="4" data-stripe="exp-year"  [(ngModel)]="expYear" />
-           </div>
-
-           <div class="form-group">
-           <label class="payment-errors">{{paymentErrors}}</label>
-           </div>
-
-           <button (click)="submit()" [disabled]="disabledForm" type="submit" class="btn btn-success">Purchase</button>
-         </form>
-       </div>
-
-       <div [(hidden)]="downloadBoxHidden">
-         <a [(href)]="downloadLink">Download</a>
-       </div>
-
-       <p>{{response}}</p>`
-       })
-      export class AcksinPurchase {
-          // Modify this to create more produts.
-          products: { [id: string]: Product[]; } = {
-              "acksinStore": [
-                  { key: "AcksinStoreSingleSite", name: "Single Site License", amount: "39" },
-                  { key: "AcksinSiteMultiStore", name: "Multi Site License", amount: "99"  }
-              ]
-          };
-
-          paymentFormHidden: bool = false;
-          downloadBoxHidden: bool = true;
-          disabledForm: bool = false;
-
-
-          downloadLink: string = '';
-          response: string = '';
-          paymentErrors: string = '';
-
-          cardNumber: string;
-          cvc: string;
-          expMonth: number;
-          expYear: number;
-          purchaseForm = new PurchaseForm();
-
-          purchaseChoices: string[];
-
-          constructor() {
-              this.purchaseChoices = this.products[purchaseProduct];
-          }
-
-
-          updateProduct(product):void {
-              console.log(product);
-              this.purchaseForm.product = product;
-          }
-
-          submit() {
-              var that = this;
-
-              // Google Analytics  Event.
-              // ga('send', 'event', 'Purchase', this.product, 'Purchase' + this.product + 'Email');
-
-              console.log(JSON.stringify({
-                  number: that.cardNumber,
-                  cvc: that.cvc,
-                  exp_month: that.expMonth,
-                  exp_year: that.expYear
-              }));
-
-
-              that.disabledForm = true;
-
-              Stripe.card.createToken({
-                  number: that.cardNumber,
-                  cvc: that.cvc,
-                  exp_month: that.expMonth,
-                  exp_year: that.expYear
-              }, this.stripeHandler.bind(this));
-          }
-
-
-          stripeHandler(status, response):void {
-              if (response.error) {
-                  this.paymentErrors = response.error.message;
-              } else {
-                  this.purchaseForm.stripeToken = response.id;
-
-                  console.log("Purchase Form:" + JSON.stringify(this.purchaseForm));
-
-                  let lambda = new AWS.Lambda();
-                  lambda.invoke({
-                      FunctionName: PurchaseLambdaFunction,
-                      Payload: JSON.stringify(this.purchaseForm)
-                  }, this.lambdaHandler.bind(this));
-              }
-          }
-
-          lambdaHandler(err, data):void {
-              if (err) {
-                  console.log(err, err.stack);
-              } else {
-                  var output = JSON.parse(data.Payload);
-                  console.log(data.Payload)
-
-                  if (output != null && output.downloadLink) {
-                      this.paymentFormHidden = true;
-                      this.downloadBoxHidden = false;
-                      this.downloadLink = output.downloadLink;
-                  } else {
-                      this.response = "Purchase Failed";
-                      this.disabledForm = false;
-                  }
-              }
-          }
-      }
-    #+end_src
+#+INCLUDE: www/angular2/purchase-form.ts src js
 
 * Download
 
-   Download this solution and get email support for *$39*.
+   Download this solution and get email support for *$99*.
 
    Included:
 
    - AWS Lambda code and policy
-   - AngularJS 2 Code
+   - AngularJS 2 Component
    - jQuery Code
    - download.js and invoice.js for generating download links and sending invoice emails.
-   - Email Support.
+   - Email Support for a year upon purchase.
+   - Unlimited site support
 
    #+BEGIN_HTML
    <script src="https://gumroad.com/js/gumroad.js"></script>

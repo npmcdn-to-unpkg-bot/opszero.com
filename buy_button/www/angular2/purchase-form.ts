@@ -20,59 +20,59 @@ interface Product {
     selector: 'acksin-purchase',
     template: `
 <div [hidden]="paymentFormHidden">
-   <form action="" method="POST" id="payment-form">
-     <!-- We will be checking for this in the function -->
+<form action="" method="POST" id="payment-form">
+<!-- We will be checking for this in the function -->
 
-     <div class="form-group">
-       <label>Product</label>
-       <div *ngFor="#i of purchaseChoices">
-         <input type="radio" name="product" (click)="updateProduct(i.key)" /> {{i.name}} - \${{i.amount}}
-       </div>
-     </div>
+<div class="form-group">
+<label>Product</label>
+<div *ngFor="#i of purchaseChoices">
+<input type="radio" name="product" (click)="updateProduct(i.key)" /> {{i.name}} - \${{i.amount}}
+</div>
+</div>
 
-     <div class="form-group">
-       <label>
-         <label>Email</label>
-         <input type="email" name="email" value="" class="form-control" [(ngModel)]="purchaseForm.email" />
-       </label>
-     </div>
+<div class="form-group">
+<label>
+<label>Email</label>
+<input type="email" name="email" value="" class="form-control" [(ngModel)]="purchaseForm.email" />
+</label>
+</div>
 
-     <div class="form-group">
-       <label>
-         <label>Card Number</label>
-         <input type="text" size="20" data-stripe="number"  class="form-control" [(ngModel)]="cardNumber" />
-       </label>
-     </div>
+<div class="form-group">
+<label>
+<label>Card Number</label>
+<input type="text" size="20" data-stripe="number"  class="form-control" [(ngModel)]="cardNumber" />
+</label>
+</div>
 
-     <div class="form-group">
-       <label>
-         <label>CVC</label>
-         <input type="text" size="4" data-stripe="cvc" class="form-control"  [(ngModel)]="cvc" />
-       </label>
-     </div>
+<div class="form-group">
+<label>
+<label>CVC</label>
+<input type="text" size="4" data-stripe="cvc" class="form-control"  [(ngModel)]="cvc" />
+</label>
+</div>
 
-     <div class="form-group input-group">
-       <label>Expiration (MM/YYYY)</label>
-       <br>
-       <input type="text" size="2" data-stripe="exp-month"  [(ngModel)]="expMonth" />
-       <span> / </span>
-       <input type="text" size="4" data-stripe="exp-year"  [(ngModel)]="expYear" />
-     </div>
+<div class="form-group input-group">
+<label>Expiration (MM/YYYY)</label>
+<br>
+<input type="text" size="2" data-stripe="exp-month"  [(ngModel)]="expMonth" />
+<span> / </span>
+<input type="text" size="4" data-stripe="exp-year"  [(ngModel)]="expYear" />
+</div>
 
-     <div class="form-group">
-     <label class="payment-errors">{{paymentErrors}}</label>
-     </div>
+<div class="form-group">
+<label class="payment-errors">{{paymentErrors}}</label>
+</div>
 
-     <button (click)="submit()" [disabled]="disabledForm" type="submit" class="btn btn-success">Purchase</button>
-   </form>
- </div>
+<button (click)="submit()" [disabled]="disabledForm" type="submit" class="btn btn-success">Purchase</button>
+</form>
+</div>
 
- <div [(hidden)]="downloadBoxHidden">
-   <a [(href)]="downloadLink">Download</a>
- </div>
+<div [(hidden)]="downloadBoxHidden">
+<a [(href)]="downloadLink">Download</a>
+</div>
 
- <p>{{response}}</p>`
- })
+<p>{{response}}</p>`
+})
 export class AcksinPurchase {
     // Modify this to create more produts.
     products: { [id: string]: Product[]; } = {
