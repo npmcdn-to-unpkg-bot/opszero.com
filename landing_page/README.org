@@ -1,21 +1,18 @@
-* Serverless Landing Page
-  :PROPERTIES:
-  :FILENAME: source/solutions/serverless-landing-page.html.erb
-  :LAYOUT:   docs
-  :END:
+#+TITLE: Serverless Landing Page
 
 ** Introduction
 
-   When starting up a website the first thing you want to do is put up a
-   tool to collect emails. There are many tools to achieve this from
+   When starting up a website the first thing you want to do is put up
+   a tool to collect emails. There are many tools to achieve this from
    MailChimp to a Google Form. However, we wanted to build a tool that
    keeps all your data in one place.
 
    We wanted to fulfill the following criteria:
 
-   - Control our user interface. Many of the Mailing List providers want
-     to customize the UI or do a redirect. We wanted to avoid that.
-   - Control privacy of your users.
+   - Control our user interface. Many of the Mailing List providers
+     want to customize the UI or do a redirect. We wanted to avoid
+     that.
+   - Control privacy of the users.
    - Make sure that customers have all the features of normal email
      subscription services. Ability to unsubscribe.
 
@@ -39,72 +36,11 @@
 
 *** Lambda Policy
 
-    #+begin_src json
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "PutItemToAutotuneInstanceMetrics",
-            "Effect": "Allow",
-            "Action": [
-                "dynamodb:PutItem"
-            ],
-            "Resource": "arn:aws:dynamodb:us-west-2:451305228097:table/AcksinEmails"
-        }
-    ]
-}
-    #+end_src
+#+INCLUDE: LandingPagePolicy.json
 
 *** Lambda Code
 
-
-    #+begin_src python
-from __future__ import print_function # Python 2/3 compatibility
-
-import boto3
-import json
-import decimal
-
-# Helper class to convert a DynamoDB item to JSON.
-class DecimalEncoder(json.JSONEncoder):
-    def default(self, o):
-        if isinstance(o, decimal.Decimal):
-            if o % 1 > 0:
-                return float(o)
-            else:
-                return int(o)
-        return super(DecimalEncoder, self).default(o)
-
-dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('AcksinEmails')
-
-print('Loading function')
-
-def lambda_handler(event, context):
-    print("Received event: " + json.dumps(event, indent=2))
-
-    product = ''
-    try:
-        product = event['Product']
-    except:
-        print("No product found")
-
-    response = table.put_item(
-        Item={
-            'Email': event['Email'],
-            'Products': [event['Product']],
-            # 'Notes': event['Notes']
-        }
-    )
-
-    # Deal with more than one subscription.
-
-    print("PutItem succeeded:")
-    print(json.dumps(response, indent=4, cls=DecimalEncoder))
-
-    return ""
-    #+end_src
-
+#+INCLUDE: index.py
 
 ** Frontend
 
@@ -113,55 +49,6 @@ def lambda_handler(event, context):
    users from the email service. We will be using AngularJS for this
    service.
 
-
-   #+begin_src js
-   import {Component, Input} from 'angular2/core';
-
-@Component({
-    selector: 'acksin-subscribe',
-    template: `
-<form action="" class="form" method="post">
-  <input name="email" placeholder="Your email address" type="email" class="form-control" [(ngModel)]="emailAddress" >
-  <br>
-  <button (click)="submit()" type="submit" class="btn btn-success">Subscribe</button>
-</form>
-
-<p>{{response}}</p>`
-})
-export class AcksinSubscribe {
-    emailAddress: string = '';
-    response: string = '';
-    product: string = '';
-
-    constructor() {
-        if acksinProduct != undefined {
-            this.product = acksinProduct;
-        }
-    }
-
-    submit() {
-        var lambda = new AWS.Lambda();
-        var that = this;
-
-        ga('send', 'event', 'Subscribe', this.product, 'Subscribe' + this.product + 'Email');
-
-        lambda.invoke({
-            FunctionName: 'landing_page_emails_POST',
-            Payload: JSON.stringify({
-                "Email": this.emailAddress,
-                "Product": this.product
-            }),
-        }, function(err, data) {
-            if (err) {
-                console.log(err, err.stack);
-            }
-
-            console.log(data.Payload);
-            that.response = "Thank you for your interest. We will be in touch.";
-        });
-    }
-}
-
-   #+end_src
+#+INCLUDE: www/js/landing_age.ts
 
 ** Help
