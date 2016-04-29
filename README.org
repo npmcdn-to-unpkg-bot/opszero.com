@@ -1,11 +1,12 @@
-#+TITLE: Serverless Solutions
+#+TITLE: NoOps Solutions
 
 These are serverless solutions that can be used to run common web
 components of websites. They are powered by [[https://aws.amazon.com/lambda][AWS Lambda]].
 
 * Components
 
- - Serverless Buy Button Powered By Stripe
+ - [[buy_button][Serverless Buy Button Powered By Stripe]]
+ - [[mailing_list][Serverless Mailing List]]
 
 * License
 

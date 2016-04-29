@@ -34,13 +34,20 @@
    function into two portions. One for subscribing and one for
    unsubscribing.
 
-*** Lambda Policy
+*** index.js
+
+#+INCLUDE: index.js
+
+*** subscribe.js
+
+*** unsubscribe.js
+
+*** email.js
+
+*** AWS Lambda Policy
 
 #+INCLUDE: LandingPagePolicy.json
 
-*** Lambda Code
-
-#+INCLUDE: index.py
 
 ** Frontend
 
@@ -49,6 +56,6 @@
    users from the email service. We will be using AngularJS for this
    service.
 
-#+INCLUDE: www/js/landing_age.ts
+#+INCLUDE: www/angular2/subscribe.ts
 
 ** Help
