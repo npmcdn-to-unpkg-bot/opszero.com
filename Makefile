@@ -23,7 +23,7 @@ website-assets: clean
 buy_button/README.html:
 	emacs buy_button/README.org --batch --eval '(org-html-export-to-html nil nil nil t)'  --kill
 	echo "---" > buy_button/docs.html.erb
-	echo "title: Acksin Autotune Docs" >> buy_button/docs.html.erb
+	echo "title: Serverless Buy Button Using Stripe" >> buy_button/docs.html.erb
 	echo "layout: docs" >> buy_button/docs.html.erb
 	echo "---" >> buy_button/docs.html.erb
 	cat buy_button/README.html >> buy_button/docs.html.erb

@@ -135,18 +135,20 @@
 
 * Download
 
-   Download this solution and get email support for *$99*.
+Download this solution *$99*.
 
    Included:
 
    - AWS Lambda code and policy
    - AngularJS 2 Component
    - jQuery Code
-   - download.js and invoice.js for generating download links and sending invoice emails.
    - Email Support for a year upon purchase.
    - Unlimited site support
+   - Commercial License
 
    #+BEGIN_HTML
    <script src="https://gumroad.com/js/gumroad.js"></script>
 <a class="gumroad-button" href="https://gum.co/dFyhf?wanted=true" target="_blank">Buy this Solution</a>
    #+END_HTML
+
+Also available as GPL on [[https://github.com/acksin/solutions][Github]].
