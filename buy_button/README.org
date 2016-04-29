@@ -142,13 +142,12 @@ Download this solution *$99*.
    - AWS Lambda code and policy
    - AngularJS 2 Component
    - jQuery Code
-   - Email Support for a year upon purchase.
-   - Unlimited site support
+   - Email Support for one year upon purchase
+   - Support for 5 sites
    - Commercial License
 
    #+BEGIN_HTML
-   <script src="https://gumroad.com/js/gumroad.js"></script>
-<a class="gumroad-button" href="https://gum.co/dFyhf?wanted=true" target="_blank">Buy this Solution</a>
+   <a href="https://transactions.sendowl.com/products/415001/FD2181FD/purchase" rel="nofollow"><img src="https://transactions.sendowl.com/assets/external/buy-now.png" /></a><script type="text/javascript" src="https://transactions.sendowl.com/assets/sendowl.js" ></script>
    #+END_HTML
 
 Also available as GPL on [[https://github.com/acksin/solutions][Github]].
