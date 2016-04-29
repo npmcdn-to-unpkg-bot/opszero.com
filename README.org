@@ -1,0 +1,18 @@
+#+TITLE: Serverless Solutions
+
+These are serverless solutions that can be used to run common web
+components of websites. They are powered by [[https://aws.amazon.com/lambda][AWS Lambda]].
+
+* Components
+
+ - Serverless Buy Button Powered By Stripe
+
+* License
+
+The components here are licensed under the [[LICENSE][GNU AGPL v3]].
+
+* Commercial License
+
+To use these components in a commercial setting Acksin sells these
+under a commercial friendly license which includes support. All
+maintenance fixes are included.
