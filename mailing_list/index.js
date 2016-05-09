@@ -1,44 +1,39 @@
-from __future__ import print_function # Python 2/3 compatibility
+console.log('Loading Acksin Mailing List function');
 
-import boto3
-import json
-import decimal
+// dependencies
+var AWS = require('aws-sdk');
 
-# Helper class to convert a DynamoDB item to JSON.
-class DecimalEncoder(json.JSONEncoder):
-    def default(self, o):
-        if isinstance(o, decimal.Decimal):
-            if o % 1 > 0:
-                return float(o)
-            else:
-                return int(o)
-        return super(DecimalEncoder, self).default(o)
+// Get reference to AWS clients
+var dynamodb = new AWS.DynamoDB();
 
-dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('AcksinEmails')
+exports.handler = function(event, context) {
+    switch(event.Action) {
+    case "Subscribe":
+        subscribe(event.Email, event.Product, event.SignUpPage) {
+    case "Unsubscribe":
 
-print('Loading function')
+    case "Email":
 
-def lambda_handler(event, context):
-    print("Received event: " + json.dumps(event, indent=2))
+    }
+}
 
-    product = ''
-    try:
-        product = event['Product']
-    except:
-        print("No product found")
-
-    response = table.put_item(
-        Item={
-            'Email': event['Email'],
-            'Products': [event['Product']],
-            # 'Notes': event['Notes']
+function subscribe(email, product, signupPage) {
+    dynamodb.putItem({
+        TableName: config.STORE_TABLE,
+        Item: {
+            Email: {
+                S: email
+            },
+            Products: {
+                S: product
+            },
+            Notes: {
+                SignUpPage: {
+                    S: signupPage
+                }
+            }
         }
-    )
+    }, function(err, data) {
 
-    # Deal with more than one subscription.
-
-    print("PutItem succeeded:")
-    print(json.dumps(response, indent=4, cls=DecimalEncoder))
-
-    return ""
+    });
+}

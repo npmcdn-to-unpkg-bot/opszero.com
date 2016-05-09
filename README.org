@@ -14,6 +14,5 @@ The components here are licensed under the [[LICENSE][GNU AGPL v3]].
 
 * Commercial License
 
-To use these components in a commercial setting Acksin sells these
-under a commercial friendly license which includes support. All
-maintenance fixes are included.
+Acksin sells these components under a commercial friendly license
+which includes one year support and upgrades.
