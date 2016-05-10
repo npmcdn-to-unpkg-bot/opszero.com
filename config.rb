@@ -8,6 +8,7 @@
 page '/*.xml', layout: false
 page '/*.json', layout: false
 page '/*.txt', layout: false
+page '/*.css', layout: false
 
 page "*", :layout => :layout
 
@@ -38,7 +39,7 @@ set :markdown, :tables => true, :autolink => true, :gh_blockcode => true, :fence
 set :markdown_engine, :redcarpet
 
 configure :build do
-  # activate :minify_css
+  activate :minify_css
   activate :minify_javascript
 
   # Append a hash to asset urls (make sure to use the url helpers)

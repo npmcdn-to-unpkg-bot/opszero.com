@@ -4,16 +4,23 @@ title: Curated and supported serverless apps to run in AWS Lambda, Google Functi
 
 <header>
   <div class="container">
-    <div class="row">
-      <div class="col-lg-12 text-center">
-        <h1 class="text-center new-header-font">opsZero Marketplace</h1>
+    <div class="jumbotron acksin-jumbotron acksin-header" id="opszero-header">
+        <h1 class="white-text text-center new-header-font">opsZero</h1>
         <br>
-        <br>
-        <h2>just in time, low cost serverless solutions</h2>
-      </div>
+        <h2 id="blurb-text" class="white-text">Curated functions to power your backend</h2>
     </div>
   </div>
 </header>
+
+
+<section>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12 text-center">
+      </div>
+    </div>
+  </div>
+</section>
 
 
 <section id="products" class="bg-light-gray">
@@ -29,9 +36,21 @@ title: Curated and supported serverless apps to run in AWS Lambda, Google Functi
           </p>
         </div>
 
-        <div class="col-lg-5">
-          <a class="btn btn-lg btn-danger" href="<%= product.buy %>" rel="nofollow">Buy $<%= product.price %></a>
-          <a class="btn btn-lg btn-success" href="<%= product.demo %>" rel="nofollow">Demo</a>
+        <div class="col-lg-4 col-lg-offset-1">
+          <p>
+            Company: <%= link_to product.company.name, product.company.url %><br>
+            Support: <%= product.company.support_email %>
+          </p>
+
+          <p>
+            <a href="https://aws.amazon.com/lambda"><i class="fa fa-amazon" aria-hidden="true"></i></a>
+          </p>
+
+          <p>
+            <a onclick="ga('send', 'event', 'Click', 'Buy', '<%= product.title %>');" class="btn btn-lg buy-button btn-danger" href="<%= product.buy %>" rel="nofollow">Buy $<%= product.price %></a>
+            <a  onclick="ga('send', 'event', 'Click', 'Demo', '<%= product.title %>');" class="btn btn-lg btn-info" href="<%= product.demo %>" rel="nofollow">Demo</a>
+          </p>
+
         </div>
       <% end %>
     </div>

@@ -1,0 +1,51 @@
+<script>
+ var experiments = {
+   "uoaN3h_hRuq_OxtHNq8TZw": [
+     function() {
+       $(".buy-button").addClass("btn-danger");
+     },
+     function() {
+       $(".buy-button").removeClass("btn-danger").addClass("btn-success");
+     }
+   ],
+   "yUgxrNMbSdqPX2aKr3CXng": [
+     function() {},
+     function() {
+       $("#blurb-text").html("Curated AWS Lambda functions");
+     },
+     function() {
+       $("#blurb-text").html("Functions as Lego Blocks for your backend");
+     },
+     function() {
+       $("#blurb-text").html("Lego blocks for your backend");
+     }
+   ]
+ };
+
+ function getExperiment() {
+   var acksinExp = localStorage.getItem("acksinExperiments");
+
+   // Get a new experiment
+   if(acksinExp == null) {
+     var expKeys = Object.keys(experiments);
+     acksinExp = expKeys[Math.floor(Math.random() * expKeys.length)];
+
+     localStorage.setItem("acksinExperiments", acksinExp);
+     return acksinExp;
+   }
+
+   // Check if experiment is still running, if it is get it.
+   if(acksinExp in experiments) {
+     return acksinExp;
+   }
+
+   // Remove the existing experiment and recurse so we can get the new experiment.
+   localStorage.removeItem("acksinExperiments");
+   return getExperiment();
+ }
+
+ $.getScript("//www.google-analytics.com/cx/api.js?experiment=" + getExperiment(), function(){
+   chosenVariation = cxApi.chooseVariation();
+   experiments[getExperiment()][chosenVariation]();
+ });
+</script>

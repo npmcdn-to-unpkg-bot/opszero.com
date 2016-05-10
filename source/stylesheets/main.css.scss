@@ -49,7 +49,7 @@ code {
     background-repeat: no-repeat;
 }
 
-@each $product in acksin, autotune, tabla, capo, conductor, strum, utils, bridge {
+@each $product in opszero {
     ##{$product}-header{
         background-image: image-url('/imgs/#{$product}.jpg');
         background-size: cover;
@@ -83,5 +83,5 @@ ul.pricing-list {
     font-weight: bold;
     font-family: "coquette",fantasy;
     font-weight: 400;
-    font-size: 64pt;
+    font-size: 72pt;
 }

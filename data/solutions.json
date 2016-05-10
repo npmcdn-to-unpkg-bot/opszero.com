@@ -5,6 +5,11 @@
         "buy": "https://transactions.sendowl.com/products/415001/FD2181FD/purchase",
         "demo": "https://www.acksin.com/examples/serverless-ecommerce/www/",
         "url": "https://www.acksin.com/solutions/serverless-ecommerce-with-stripe/",
-        "price": "19.99"
+        "price": "19.99",
+        "company": {
+            "name": "Acksin",
+            "url": "https://www.acksin.com",
+            "support_email": "opszero@acksin.com"
+        }
     }
 ]
