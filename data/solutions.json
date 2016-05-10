@@ -1,0 +1,10 @@
+[
+    {
+        "title": "Buy Button Powered By Stripe",
+        "description": "Want to create a Shopping Cart on the cheap without running any servers yourself? This is a serverless solution to get you running with a simple serverless ecommerce solution. Great for if you are just starting out and don't want to run a server but still have a lot of control.",
+        "buy": "https://transactions.sendowl.com/products/415001/FD2181FD/purchase",
+        "demo": "https://www.acksin.com/examples/serverless-ecommerce/www/",
+        "url": "https://www.acksin.com/solutions/serverless-ecommerce-with-stripe/",
+        "price": "19.99"
+    }
+]

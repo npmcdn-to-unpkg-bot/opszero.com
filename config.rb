@@ -9,8 +9,9 @@ page '/*.xml', layout: false
 page '/*.json', layout: false
 page '/*.txt', layout: false
 
-# With alternative layout
-# page "/path/to/file.html", layout: :otherlayout
+page "*", :layout => :layout
+
+# redirect "/support/", to: "/consulting/"
 
 # Proxy pages (http://middlemanapp.com/basics/dynamic-pages/)
 # proxy "/this-page-has-no-template.html", "/template-file.html", locals: {
@@ -23,22 +24,23 @@ configure :development do
   activate :livereload
 end
 
+activate :directory_indexes
+
 ###
 # Helpers
 ###
 
 # Methods defined in the helpers block are available in templates
-# helpers do
-#   def some_helper
-#     "Helping"
-#   end
-# end
+helpers do
+end
 
-# Build-specific configuration
+set :markdown, :tables => true, :autolink => true, :gh_blockcode => true, :fenced_code_blocks => true
+set :markdown_engine, :redcarpet
+
 configure :build do
-  # Minify CSS on build
   # activate :minify_css
+  activate :minify_javascript
 
-  # Minify Javascript on build
-  # activate :minify_javascript
+  # Append a hash to asset urls (make sure to use the url helpers)
+  activate :asset_hash
 end

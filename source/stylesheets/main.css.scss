@@ -1,0 +1,87 @@
+@charset "utf-8";
+
+body, h1, h2 {
+    font-family: "proxima-nova";
+}
+
+body {
+    font-size: 12pt;
+}
+
+code {
+    font-size: 80%;
+}
+
+.row {
+    margin-bottom: 40px;
+}
+
+.center {
+    text-align: center;
+}
+
+.footer-list {
+    padding: 0;
+
+    li {
+        list-style-type: none;
+    }
+
+}
+
+.acksin-jumbotron {
+    height: 550px;
+    text-align: center;
+}
+
+.resources .author {
+    font-weight: 100;
+}
+
+.white-text {
+    color: #F8F8F8 !important;
+}
+
+#spider-header {
+    background-image: image-url('/imgs/logos/spider.png');
+    background-color: white;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+@each $product in acksin, autotune, tabla, capo, conductor, strum, utils, bridge {
+    ##{$product}-header{
+        background-image: image-url('/imgs/#{$product}.jpg');
+        background-size: cover;
+    }
+}
+
+
+.bs-callout-info {
+    border-left-color: #1b809e;
+}
+.bs-callout {
+    font-size: 120%;
+    padding: 20px;
+    margin: 20px 0;
+    border: 1px solid #eee;
+    border-left-width: 5px;
+    border-radius: 3px;
+}
+
+ul.pricing-list {
+    padding:0;
+    margin:0;
+
+    li {
+        list-style-type: none;
+    }
+}
+
+/* Experiment CeK01Si7S_m_c7iYjyu9Nw */
+.new-header-font {
+    font-weight: bold;
+    font-family: "coquette",fantasy;
+    font-weight: 400;
+    font-size: 64pt;
+}

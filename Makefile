@@ -1,4 +1,3 @@
-PRODUCT := serverless-solutions
 VERSION := $(shell cat VERSION)
 WEBSITE := acksin.com
 
@@ -7,14 +6,6 @@ all: build
 build: deps test
 	go build -ldflags "-X main.version=$(VERSION)"
 	$(MAKE) website-assets
-
-archive:
-	tar cvzf $(PRODUCT)-$(VERSION).tar.gz $(PRODUCT)
-
-release: spell build archive
-	-git commit -m "Version $(VERSION)"
-	-git tag v$(VERSION) && git push --tags
-	s3cmd put --acl-public $(PRODUCT)-$(VERSION).tar.gz s3://assets.acksin.co/$(PRODUCT)/${VERSION}/$(PRODUCT)-${VERSION}.tar.gz
 
 website-assets: clean
 	$(MAKE) buy_button/README.html
@@ -36,5 +27,10 @@ spell:
 	for i in website/_download.erb website/index.html.erb README.org; do \
 		aspell check --dont-backup --mode=html $$i; \
 	done
+
+release:
+	bundle exec middleman build --clean
+	# s3cmd sync --acl-public --delete-removed --mime-type="text/css" build/stylesheets s3://www.acksin.com/
+	s3cmd sync --acl-public --delete-removed --no-mime-magic --guess-mime-type build/ s3://www.opszero.com/
 
 .PHONY: website website-dev

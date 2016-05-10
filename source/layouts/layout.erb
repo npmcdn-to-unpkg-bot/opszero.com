@@ -1,20 +1,126 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en-US">
   <head>
-    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <script>document.write('<base href="' + document.location.href + '" />');</script>
+
     <meta charset="utf-8">
-    <meta content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
 
-    <!-- Use title if it's in the page YAML frontmatter -->
-    <title><%= current_page.data.title || "Middleman" %></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <link href='//fonts.googleapis.com/css?family=Lato:300,400' rel='stylesheet' type='text/css'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="description" content="<%= current_page.data.description || "" %>">
+    <meta name="author" content="Acksin">
 
-    <%= stylesheet_link_tag :site %>
-    <%= javascript_include_tag :all %>
+    <title>opsZero by Acksin - <%= current_page.data.title || "Home" %></title>
+
+    <script>
+     var acksinProduct = "<%= current_page.data.product || "all" %>";
+    </script>
+
+    <link data-cfasync="true" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-XdYbMnZ/QjLh6iI4ogqCTaIjrFk87ip+ekIjefZch0Y+PvJ8CDYtEs1ipDmPorQ+" crossorigin="anonymous">
+    <script src="https://use.typekit.net/znw0hnr.js"></script>
+    <script>try{Typekit.load({ async: true });}catch(e){}</script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es6-shim/0.35.0/es6-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/systemjs/0.19.16/system-polyfills.js"></script>
+    <script src="https://npmcdn.com/angular2/es6/dev/src/testing/shims_for_IE.js"></script>
+
+    <script src="https://code.angularjs.org/tools/system.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typescript/1.8.9/typescript.min.js"></script>
+    <script src="https://code.angularjs.org/2.0.0-beta.15/angular2-polyfills.js"></script>
+    <script src="https://code.angularjs.org/2.0.0-beta.15/Rx.js"></script>
+    <script src="https://code.angularjs.org/2.0.0-beta.15/angular2.js"></script>
+    <script src="https://code.angularjs.org/2.0.0-beta.15/router.js"></script>
+    <script src="https://code.angularjs.org/2.0.0-beta.15/http.dev.js"></script>
+    <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=Intl.~locale.en"></script>
+
+    <script src="//cdn.auth0.com/js/lock-9.0.min.js"></script>
+
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.3.3.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+    <script src="https://cdn.smooch.io/smooch.min.js"></script>
+    <script>
+     Smooch.init({ appToken: '384uwpg82a0d8x9p56hyra48n' });
+    </script>
+
+    <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+
+    <% if build? %>
+      <%= javascript_include_tag :all %>
+    <% else %>
+      <%= javascript_include_tag :dev %>
+    <% end %>
+
+    <script type="text/javascript" src="https://transactions.sendowl.com/assets/sendowl.js" ></script>
+
+    <link href="//maxcdn.bootstrapcdn.com/bootswatch/3.3.6/paper/bootstrap.min.css" rel="stylesheet">
+    <%= stylesheet_link_tag :main %>
+
+    <%= partial :experiment %>
+
+    <script>
+     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+     <% if build? %>
+     ga('create', 'UA-75403807-2', 'auto');
+     ga('require', 'linkid');
+     ga('send', 'pageview');
+     <% end %>
+    </script>
   </head>
 
-  <body class="<%= page_classes %>">
-    <%= yield %>
+  <body>
+    <nav class="navbar navbar-default">
+      <div class="container">
+        <div class="navbar-header page-scroll">
+          <a class="navbar-brand page-scroll" href="/">opsZero Marketplace</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div>
+          <ul class="nav navbar-nav navbar-right">
+            <li>
+              <a class="page-scroll" href="/about">About</a>
+            </li>
+            <li>
+              <a class="page-scroll" href="https://www.acksin.com/support">Support</a>
+            </li>
+            <li>
+              <form action="/fugue/console">
+                <button class="btn btn-success navbar-btn">Submit Function</button>
+              </form>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      <%= yield %>
+    </main>
+
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4">
+          </div>
+          <div class="col-md-4">
+            <ul class="footer-list">
+              <li><b>Contact</b></li>
+              <li><a  onclick="ga('send', 'event', 'Consulting', 'Hey', 'Consulting Hey Email');" href="mailto:opszero@acksin.com"><i class="fa fa-inbox"></i> opszero@acksin.com</a></li>
+              <li><a  onclick="ga('send', 'event', 'Contact', 'Twitter', 'Contact Twitter Link');" href="https://twitter.com/acksindevops"><i class="fa fa-twitter"></i> @acksindevops</a></li>
+          </div>
+          <div class="col-md-4">
+            <span class="copyright">Copyright &copy; 2016 <a href="https://www.acksin.com">Acksin LLC.</a></span>
+          </div>
+        </div>
+      </div>
+    </footer>
   </body>
 </html>

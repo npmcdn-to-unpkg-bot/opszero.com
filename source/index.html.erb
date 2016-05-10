@@ -1,13 +1,40 @@
 ---
-title: Welcome to Middleman
+title: Curated and supported serverless apps to run in AWS Lambda, Google Functions and Azure Cloud Function.
 ---
 
-<div class="welcome">
-  <div class="logo">
-    <%= image_tag "middleman-logo.svg" %>
+<header>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12 text-center">
+        <h1 class="text-center new-header-font">opsZero Marketplace</h1>
+        <br>
+        <br>
+        <h2>just in time, low cost serverless solutions</h2>
+      </div>
+    </div>
   </div>
-  <h1>Middleman is Running</h1>
-  <p class="doc">
-    <%= link_to "Read Documentation Online", "https://middlemanapp.com", target: "_blank" %>
-  </p><!-- .doc -->
-</div><!-- .welcome -->
+</header>
+
+
+<section id="products" class="bg-light-gray">
+  <div class="container">
+
+    <div class="row">
+      <% data.solutions.each do |product| %>
+        <div class="col-lg-7">
+          <h2><a href="<%= product.url %>"><%= product.title %></a></h2>
+
+          <p>
+            <%= product.description %>
+          </p>
+        </div>
+
+        <div class="col-lg-5">
+          <a class="btn btn-lg btn-danger" href="<%= product.buy %>" rel="nofollow">Buy $<%= product.price %></a>
+          <a class="btn btn-lg btn-success" href="<%= product.demo %>" rel="nofollow">Demo</a>
+        </div>
+      <% end %>
+    </div>
+
+  </div>
+</section>
