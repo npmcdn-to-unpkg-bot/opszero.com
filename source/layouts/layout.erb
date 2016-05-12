@@ -48,11 +48,7 @@
 
     <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 
-    <% if build? %>
-      <%= javascript_include_tag :all %>
-    <% else %>
-      <%= javascript_include_tag :dev %>
-    <% end %>
+    <%= javascript_include_tag :all %>
 
     <script type="text/javascript" src="https://transactions.sendowl.com/assets/sendowl.js" ></script>
 
@@ -89,7 +85,13 @@
               <a class="page-scroll" href="/about">About</a>
             </li>
             <li>
-              <a class="page-scroll" href="https://www.acksin.com/support">Support</a>
+              <a class="page-scroll" href="/provided">What's Provided?</a>
+            </li>
+            <li>
+              <a class="page-scroll" href="/request">Request Function</a>
+            </li>
+            <li>
+              <a class="page-scroll" href="https://www.acksin.com/support">Support &amp; Consulting</a>
             </li>
             <li>
               <form action="/submit">
@@ -113,8 +115,8 @@
           <div class="col-md-4">
             <ul class="footer-list">
               <li><b>Contact</b></li>
-              <li><a  onclick="ga('send', 'event', 'Consulting', 'Hey', 'Consulting Hey Email');" href="mailto:opszero@acksin.com"><i class="fa fa-inbox"></i> opszero@acksin.com</a></li>
-              <li><a  onclick="ga('send', 'event', 'Contact', 'Twitter', 'Contact Twitter Link');" href="https://twitter.com/acksindevops"><i class="fa fa-twitter"></i> @acksindevops</a></li>
+              <li><a onclick="ga('send', 'event', 'Consulting', 'Hey', 'Consulting Hey Email');" href="mailto:opszero@acksin.com"><i class="fa fa-inbox"></i> opszero@acksin.com</a></li>
+              <li><a onclick="ga('send', 'event', 'Contact', 'Twitter', 'Contact Twitter Link');" href="https://twitter.com/acksindevops"><i class="fa fa-twitter"></i> @acksindevops</a></li>
           </div>
           <div class="col-md-4">
             <span class="copyright">Copyright &copy; 2016 <a href="https://www.acksin.com">Acksin LLC.</a></span>
@@ -122,5 +124,16 @@
         </div>
       </div>
     </footer>
+
+    <script>
+     System.config({
+       transpiler: 'typescript',
+       typescriptOptions: { emitDecoratorMetadata: true },
+       packages: {'app': {defaultExtension: 'ts'}}
+     });
+     System.import('/javascripts/main.ts') .then(null, console.error.bind(console));
+    </script>
+
   </body>
+
 </html>

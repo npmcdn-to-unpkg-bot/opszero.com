@@ -1,11 +1,109 @@
 [
     {
         "title": "Buy Button Powered By Stripe",
-        "description": "Want to create a Shopping Cart on the cheap without running any servers yourself? This is a serverless solution to get you running with a simple serverless ecommerce solution. Great for if you are just starting out and don't want to run a server but still have a lot of control.",
+        "description": "A digital sales buy button powered by Stripe. No need to run servers just run this AWS Lambda function with your files hosted on S3. Also generates one time download links.",
         "buy": "https://transactions.sendowl.com/products/415001/FD2181FD/purchase",
         "demo": "https://www.acksin.com/examples/serverless-ecommerce/www/",
         "url": "https://www.acksin.com/solutions/serverless-ecommerce-with-stripe/",
+        "github": "https://github.com/opszero/buy-button",
         "price": "19.99",
+        "company": {
+            "name": "Acksin",
+            "url": "https://www.acksin.com",
+            "support_email": "opszero@acksin.com"
+        }
+    },
+    {
+        "title": "AWS EC2 Cleanup",
+        "description": "AWS EC2 Cleanup is an AWS Lambda function that waits for EC2 termination events and allows you to do cleanup of hosts from Chef, Puppet, and other services. Currently we support Chef. Other services will come in the future.",
+        "buy": "https://transactions.sendowl.com/products/417777/AACDA0B2/purchase",
+        "url": "https://www.acksin.com/solutions/aws-ec2-cleanup/",
+        "github": "https://github.com/opszero/aws-ec2-cleanup",
+        "price": "19.99",
+        "company": {
+            "name": "Acksin",
+            "url": "https://www.acksin.com",
+            "support_email": "opszero@acksin.com"
+        }
+    },
+    {
+        "title": "Mailing List",
+        "description": "AWS Lambda powered mailiing list. Includes subscribe, unsubscribe and email workflows.",
+        "buy": "https://transactions.sendowl.com/products/417786/804DE068/purchase",
+        "github": "https://github.com/opszero/mailing-list",
+        "url": "http://www.acksin.com/solutions/serverless-mailing-list",
+        "price": "19.99",
+        "demo": "/#subscribe",
+        "company": {
+            "name": "Acksin",
+            "url": "https://www.acksin.com",
+            "support_email": "opszero@acksin.com"
+        }
+    },
+    {
+        "title": "Video Resizer",
+        "description": "An AWS Lambda function that resizes videos and outputs thumbnails when uploaded to an S3 Bucket.",
+        "buy": "",
+        "demo": "",
+        "github": "https://github.com/opszero/video-resizer",
+        "url": "https://github.com/opszero/video-resizer",
+        "price": "24.99",
+        "company": {
+            "name": "Acksin",
+            "url": "https://www.acksin.com",
+            "support_email": "opszero@acksin.com"
+        }
+    },
+    {
+        "title": "Image Resizer",
+        "description": "An AWS Lambda function that resizes iamges and outputs thumbnails when uploaded to an S3 Bucket.",
+        "buy": "",
+        "demo": "",
+        "github": "https://github.com/opszero/image-resizer",
+        "url": "https://github.com/opszero/image-resizer",
+        "price": "24.99",
+        "company": {
+            "name": "Acksin",
+            "url": "https://www.acksin.com",
+            "support_email": "opszero@acksin.com"
+        }
+    },
+    {
+        "title": "Auth",
+        "description": "An AWS Lambda powered authentication solutions for Serverless applications. Includes signup, login, verify, change password and reset password.",
+        "buy": "",
+        "demo": "",
+        "github": "https://github.com/opszero/auth",
+        "url": "https://github.com/opszero/auth",
+        "price": "24.99",
+        "company": {
+            "name": "Acksin",
+            "url": "https://www.acksin.com",
+            "support_email": "opszero@acksin.com"
+        }
+    },
+    {
+        "title": "Forum",
+        "description": "A serverless forum like phpBB, vBulletin and Discourse.",
+        "buy": "",
+        "demo": "",
+        "github": "https://github.com/justserverless/discuss",
+        "url": "http://justserverless.com/blog/introducing-discuss-a-serverless-forum-software/",
+        "price": "24.99",
+        "company": {
+            "name": "Acksin",
+            "url": "https://www.acksin.com",
+            "support_email": "opszero@acksin.com"
+        }
+    },
+    {
+        "title": "Load Testing",
+        "description": "Goad allows you to load test your websites from all over the world whilst costing you the tiniest fractions of a penny by using AWS Lambda in multiple regions simultaneously.",
+        "buy": "",
+        "demo": "https://goad.io",
+        "github": "https://github.com/goadapp/goad",
+        "url": "https://goad.io",
+        "price": "24.99",
         "company": {
             "name": "Acksin",
             "url": "https://www.acksin.com",

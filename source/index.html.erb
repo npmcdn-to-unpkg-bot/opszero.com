@@ -1,13 +1,13 @@
 ---
-title: Curated and supported serverless apps to run in AWS Lambda, Google Functions and Azure Cloud Function.
+title: Curated and supported serverless apps to run in AWS Lambda, Google Cloud Functions and Azure Functions.
 ---
 
 <header>
   <div class="container">
     <div class="jumbotron acksin-jumbotron acksin-header" id="opszero-header">
-        <h1 class="white-text text-center new-header-font">opsZero</h1>
-        <br>
-        <h2 id="blurb-text" class="white-text">Curated functions to power your backend</h2>
+      <h1 class="white-text text-center new-header-font">opsZero</h1>
+      <br>
+      <h2 id="blurb-text" class="white-text">Curated functions to power your backend</h2>
     </div>
   </div>
 </header>
@@ -16,7 +16,58 @@ title: Curated and supported serverless apps to run in AWS Lambda, Google Functi
 <section>
   <div class="container">
     <div class="row">
-      <div class="col-lg-12 text-center">
+      <div class="col-lg-6" id="subscribe">
+        <p>
+          Using Event based systems such as AWS Lambda, Google Cloud
+          Function and Azure Functions reduces your cost and gives you
+          immense savings in terms of people bandwidth, operational
+          overhead, and division of labor. opsZero is here to provide
+          you with well tested functions to run your backend.
+        </p>
+
+        <p>To get notifications on new functions and product updates from <a href="https://www.acksin.com">Acksin</a> subscribe below.</p>
+
+        <%= partial :subscribe %>
+      </div>
+
+      <div class="col-lg-6">
+        <h2>Installation is Easy</h2>
+
+<code><pre>
+export AWS_ACCESS_KEY_ID=yourkey
+export AWS_SECRET_ACCESS_KEY=yoursecretkey
+unzip -a downloadfile.zip
+make install
+</pre></code>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-7">
+        <h2>Submit Your Functions</h2>
+
+        <p>
+          We are looking for functions to include in our list below
+          and would love for you to submit your functions. We don't
+          take any commission and placement is absolutely free. We
+          just ask that you provide the following:
+        </p>
+
+        <ul>
+          <li>README.md or README.org as the documentation</li>
+          <li><a href="https://terraform.io">Terraform</a> script for installation. <a href="https://github.com/opszero/buy-button/blob/master/buy_button.tf">Example.</a></li>
+          <li>Buy button link. We recommend <a href="https://sendowl.com">SendOwl</a> or <a href="https://gumroad.com">Gumroad</a>.</li>
+
+        </ul>
+
+        <form action="/submit">
+          <button onclick="ga('send', 'event', 'Click', 'Submit Your Function', 'Submit Your Function below fold');" class="btn btn-success btn-lg navbar-btn">Submit Your Function</button>
+        </form>
       </div>
     </div>
   </div>
@@ -25,12 +76,10 @@ title: Curated and supported serverless apps to run in AWS Lambda, Google Functi
 
 <section id="products" class="bg-light-gray">
   <div class="container">
-
-    <div class="row">
-      <% data.solutions.each do |product| %>
+    <% data.solutions.each do |product| %>
+      <div class="row">
         <div class="col-lg-7">
-          <h2><a href="<%= product.url %>"><%= product.title %></a></h2>
-
+          <h3><a onclick="ga('send', 'event', 'Click', 'ProductPage', '<%= product.title %>');" href="/function/<%= product.title.parameterize %>"><%= product.title %></a></h3>
           <p>
             <%= product.description %>
           </p>
@@ -38,22 +87,35 @@ title: Curated and supported serverless apps to run in AWS Lambda, Google Functi
 
         <div class="col-lg-4 col-lg-offset-1">
           <p>
-            Company: <%= link_to product.company.name, product.company.url %><br>
-            Support: <%= product.company.support_email %>
+            <% if !product.buy.nil? && product.buy != "" %>
+              Support by: <%= link_to product.company.name, product.company.url %><br>
+              Support email: <%= product.company.support_email %>
+            <% end %>
           </p>
 
           <p>
             <a href="https://aws.amazon.com/lambda"><i class="fa fa-amazon" aria-hidden="true"></i></a>
+            <% if !product.github.nil? && product.github != "" %>
+              <a  onclick="ga('send', 'event', 'Click', 'Github', '<%= product.title %>');" href="<%= product.github %>"><i class="fa fa-github" aria-hidden="true"></i></a>
+            <% end %>
           </p>
 
           <p>
-            <a onclick="ga('send', 'event', 'Click', 'Buy', '<%= product.title %>');" class="btn btn-lg buy-button btn-danger" href="<%= product.buy %>" rel="nofollow">Buy $<%= product.price %></a>
-            <a  onclick="ga('send', 'event', 'Click', 'Demo', '<%= product.title %>');" class="btn btn-lg btn-info" href="<%= product.demo %>" rel="nofollow">Demo</a>
+            <% if !product.buy.nil? && product.buy != "" %>
+              <a onclick="ga('send', 'event', 'Click', 'Buy', '<%= product.title %>');" class="btn btn-lg buy-button btn-danger" href="<%= product.buy %>" rel="nofollow">Buy $<%= product.price %></a>
+            <% end %>
+
+            <a onclick="ga('send', 'event', 'Click', 'Docs', '<%= product.title %>');" class="btn btn-lg btn-success" href="<%= product.url %>">Docs</a>
+
+            <% if !product.demo.nil?  && product.demo != "" %>
+              <a  onclick="ga('send', 'event', 'Click', 'Demo', '<%= product.title %>');" class="btn btn-lg btn-default" href="<%= product.demo %>" rel="nofollow">Demo</a>
+            <% end %>
           </p>
 
         </div>
-      <% end %>
-    </div>
+      </div>
+
+    <% end %>
 
   </div>
 </section>

@@ -1,3 +1,5 @@
+require 'active_support/inflector/transliterate'
+
 ###
 # Page options, layouts, aliases and proxies
 ###
@@ -11,6 +13,13 @@ page '/*.txt', layout: false
 page '/*.css', layout: false
 
 page "*", :layout => :layout
+
+data.solutions.each do |product|
+  proxy "/function/#{product.title.parameterize}/index.html", "function.html", :locals => { :product => product }, ignore: true
+end
+
+ignore 'function/'
+
 
 # redirect "/support/", to: "/consulting/"
 

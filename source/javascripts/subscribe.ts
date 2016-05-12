@@ -7,6 +7,9 @@ import {Component, Input} from 'angular2/core';
 <input name="email" placeholder="Your email address" type="email" class="form-control" [(ngModel)]="emailAddress" >
 <br>
 <button (click)="submit()" type="submit" class="btn btn-success">Subscribe</button>
+
+<a (click)="twitter()" href="https://twitter.com/acksindevops" class="btn btn-primary" data-show-count="false" data-size="large"><i class="fa fa-twitter"></i> Follow @acksindevops</a>
+<a (click)="consulting()" href="mailto:consulting@acksin.com"  class="btn btn-default">Consulting</a>
 </form>
 
 <p>{{response}}</p>`
@@ -20,6 +23,10 @@ export class AcksinSubscribe {
         if acksinProduct != undefined {
             this.product = acksinProduct;
         }
+    }
+
+    twitter() {
+        ga('send', 'event', 'Subscribe', 'Twitter');
     }
 
     submit() {
