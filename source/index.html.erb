@@ -48,7 +48,7 @@ make install
 <section>
   <div class="container">
     <div class="row">
-      <div class="col-lg-7">
+      <div class="col-lg-6">
         <h2>Submit Your Functions</h2>
 
         <p>
@@ -96,7 +96,7 @@ make install
           <p>
             <a href="https://aws.amazon.com/lambda"><i class="fa fa-amazon" aria-hidden="true"></i></a>
             <% if !product.github.nil? && product.github != "" %>
-              <a  onclick="ga('send', 'event', 'Click', 'Github', '<%= product.title %>');" href="<%= product.github %>"><i class="fa fa-github" aria-hidden="true"></i></a>
+              <a class="github-icon-exp" onclick="ga('send', 'event', 'Click', 'Github', '<%= product.title %>');" href="<%= product.github %>"><i class="fa fa-github" aria-hidden="true"></i></a>
             <% end %>
           </p>
 
@@ -104,8 +104,6 @@ make install
             <% if !product.buy.nil? && product.buy != "" %>
               <a onclick="ga('send', 'event', 'Click', 'Buy', '<%= product.title %>');" class="btn btn-lg buy-button btn-danger" href="<%= product.buy %>" rel="nofollow">Buy $<%= product.price %></a>
             <% end %>
-
-            <a onclick="ga('send', 'event', 'Click', 'Docs', '<%= product.title %>');" class="btn btn-lg btn-success" href="<%= product.url %>">Docs</a>
 
             <% if !product.demo.nil?  && product.demo != "" %>
               <a  onclick="ga('send', 'event', 'Click', 'Demo', '<%= product.title %>');" class="btn btn-lg btn-default" href="<%= product.demo %>" rel="nofollow">Demo</a>
