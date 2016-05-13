@@ -7,6 +7,7 @@
         "url": "https://www.acksin.com/solutions/serverless-ecommerce-with-stripe/",
         "github": "https://github.com/opszero/buy-button",
         "price": "19.99",
+        "readme": "https://raw.githubusercontent.com/opszero/buy-button/master/README.org",
         "company": {
             "name": "Acksin",
             "url": "https://www.acksin.com",
@@ -20,6 +21,7 @@
         "url": "https://www.acksin.com/solutions/aws-ec2-cleanup/",
         "github": "https://github.com/opszero/aws-ec2-cleanup",
         "price": "19.99",
+        "readme": "https://raw.githubusercontent.com/opszero/aws-ec2-cleanup/master/README.org",
         "company": {
             "name": "Acksin",
             "url": "https://www.acksin.com",
@@ -34,6 +36,7 @@
         "url": "http://www.acksin.com/solutions/serverless-mailing-list",
         "price": "19.99",
         "demo": "/#subscribe",
+        "readme": "https://raw.githubusercontent.com/opszero/mailing-list/master/README.org",
         "company": {
             "name": "Acksin",
             "url": "https://www.acksin.com",
@@ -48,6 +51,7 @@
         "github": "https://github.com/opszero/video-resizer",
         "url": "https://github.com/opszero/video-resizer",
         "price": "24.99",
+        "readme": "https://raw.githubusercontent.com/opszero/video-resizer/master/README.md",
         "company": {
             "name": "Acksin",
             "url": "https://www.acksin.com",
@@ -62,6 +66,7 @@
         "github": "https://github.com/opszero/image-resizer",
         "url": "https://github.com/opszero/image-resizer",
         "price": "24.99",
+        "readme": "https://raw.githubusercontent.com/opszero/image-resizer/master/README.md",
         "company": {
             "name": "Acksin",
             "url": "https://www.acksin.com",
@@ -76,6 +81,7 @@
         "github": "https://github.com/opszero/auth",
         "url": "https://github.com/opszero/auth",
         "price": "24.99",
+        "readme": "https://raw.githubusercontent.com/opszero/auth/master/README.md",
         "company": {
             "name": "Acksin",
             "url": "https://www.acksin.com",
@@ -90,6 +96,7 @@
         "github": "https://github.com/justserverless/discuss",
         "url": "http://justserverless.com/blog/introducing-discuss-a-serverless-forum-software/",
         "price": "24.99",
+        "readme": "https://raw.githubusercontent.com/JustServerless/discuss/master/README.md",
         "company": {
             "name": "Acksin",
             "url": "https://www.acksin.com",
@@ -104,6 +111,7 @@
         "github": "https://github.com/goadapp/goad",
         "url": "https://goad.io",
         "price": "24.99",
+        "readme": "https://raw.githubusercontent.com/goadapp/goad/master/README.md",
         "company": {
             "name": "Acksin",
             "url": "https://www.acksin.com",

@@ -1,4 +1,5 @@
 require 'active_support/inflector/transliterate'
+require 'org-ruby'
 
 ###
 # Page options, layouts, aliases and proxies
@@ -40,12 +41,20 @@ activate :directory_indexes
 # Helpers
 ###
 
-# Methods defined in the helpers block are available in templates
-helpers do
-end
-
 set :markdown, :tables => true, :autolink => true, :gh_blockcode => true, :fenced_code_blocks => true
 set :markdown_engine, :redcarpet
+
+# Methods defined in the helpers block are available in templates
+helpers do
+  def markdown(source)
+    Redcarpet::Markdown.new(Redcarpet::Render::HTML, autolink: true, tables: true).render(source)
+  end
+
+  def orgmode(source)
+    Orgmode::Parser.new(source).to_html
+  end
+end
+
 
 configure :build do
   activate :minify_css
