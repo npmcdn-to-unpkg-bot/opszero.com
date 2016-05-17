@@ -14,3 +14,7 @@ gem 'middleman-livereload'
 
 gem 'activesupport'
 gem 'org-ruby'
+
+gem 'redcarpet'
+
+gem 'classifier'

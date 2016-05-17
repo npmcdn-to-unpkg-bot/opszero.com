@@ -12,7 +12,12 @@
             "name": "Acksin",
             "url": "https://www.acksin.com",
             "support_email": "opszero@acksin.com"
-        }
+        },
+        "tags": [
+            "stripe",
+            "ecommerce",
+            "download"
+        ]
     },
     {
         "title": "AWS EC2 Cleanup",
@@ -26,7 +31,12 @@
             "name": "Acksin",
             "url": "https://www.acksin.com",
             "support_email": "opszero@acksin.com"
-        }
+        },
+        "tags": [
+            "ec2",
+            "autoscale",
+            "cleanup"
+        ]
     },
     {
         "title": "Mailing List",
@@ -41,12 +51,15 @@
             "name": "Acksin",
             "url": "https://www.acksin.com",
             "support_email": "opszero@acksin.com"
-        }
+        },
+        "tags": [
+            "startup"
+        ]
     },
     {
         "title": "Video Resizer",
         "description": "An AWS Lambda function that resizes videos and outputs thumbnails when uploaded to an S3 Bucket.",
-        "buy": "",
+        "buy": "https://transactions.sendowl.com/products/419627/72B5ECF5/purchase",
         "demo": "",
         "github": "https://github.com/opszero/video-resizer",
         "url": "https://github.com/opszero/video-resizer",
@@ -61,7 +74,7 @@
     {
         "title": "Image Resizer",
         "description": "An AWS Lambda function that resizes iamges and outputs thumbnails when uploaded to an S3 Bucket.",
-        "buy": "",
+        "buy": "https://transactions.sendowl.com/products/419634/D627A1C9/purchase",
         "demo": "",
         "github": "https://github.com/opszero/image-resizer",
         "url": "https://github.com/opszero/image-resizer",

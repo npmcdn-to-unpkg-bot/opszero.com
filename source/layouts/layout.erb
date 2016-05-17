@@ -11,7 +11,7 @@
     <meta name="description" content="<%= current_page.data.description || "" %>">
     <meta name="author" content="Acksin">
 
-    <title>opsZero by Acksin - <%= current_page.data.title || "Home" %></title>
+    <title>opsZero by Acksin - <%= content_for?(:title) ? yield_content(:title) : (current_page.data.title || "Home") %></title>
 
     <script>
      var acksinProduct = "opszero";
@@ -91,7 +91,10 @@
               <a class="page-scroll" href="/request">Request Function</a>
             </li>
             <li>
-              <a class="page-scroll" href="https://www.acksin.com/support">Support &amp; Consulting</a>
+              <a href="https://plasso.co/s/GpHNULeUHM">Support Plans</a>
+            </li>
+            <li>
+              <a class="page-scroll" href="https://www.acksin.com/support">Consulting</a>
             </li>
             <li>
               <form action="/submit">
@@ -111,12 +114,19 @@
       <div class="container">
         <div class="row">
           <div class="col-md-4">
+            <ul class="footer-list">
+              <li><b>Other Products by Acksin</b></li>
+              <li><a href="https://www.acksin.com/autotune">Autotune</a></li>
+              <li><a href="https://www.acksin.com/strum">STRUM</a></li>
+            </ul>
           </div>
           <div class="col-md-4">
             <ul class="footer-list">
               <li><b>Contact</b></li>
+              <li><a href="https://www.acksin.com">Acksin</a></li>
               <li><a onclick="ga('send', 'event', 'Consulting', 'Hey', 'Consulting Hey Email');" href="mailto:opszero@acksin.com"><i class="fa fa-inbox"></i> opszero@acksin.com</a></li>
               <li><a onclick="ga('send', 'event', 'Contact', 'Twitter', 'Contact Twitter Link');" href="https://twitter.com/acksindevops"><i class="fa fa-twitter"></i> @acksindevops</a></li>
+            </ul>
           </div>
           <div class="col-md-4">
             <span class="copyright">Copyright &copy; 2016 <a href="https://www.acksin.com">Acksin LLC.</a></span>

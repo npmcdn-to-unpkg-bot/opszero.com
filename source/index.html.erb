@@ -30,7 +30,7 @@ title: Curated and supported serverless apps to run in AWS Lambda, Google Cloud 
         <%= partial :subscribe %>
       </div>
 
-      <div class="col-lg-6">
+      <div class="col-lg-6" id="installation">
         <h2>Installation is Easy</h2>
 
 <code><pre>
@@ -74,10 +74,8 @@ make install
         <h2>Optimize your servers</h2>
 
         <p>
-          If you are not yet ready to move your workload to the cloud
-          check out <a href="https://www.acksin.com/autotune">Acksin Autotune</a> get
-          the best performance out of your servers and <a href="https://www.acksin.com/strum">Acksin STRUM</a> to
-          diagnose server issues.
+          If you are not ready to get rid of your servers check out <a href="https://www.acksin.com/autotune">Acksin Autotune</a> to
+          optimize your machines for performance.
         </p>
       </div>
     </div>
@@ -119,6 +117,9 @@ make install
             <% if !product.demo.nil?  && product.demo != "" %>
               <a  onclick="ga('send', 'event', 'Click', 'Demo', '<%= product.title %>');" class="btn btn-lg btn-default" href="<%= product.demo %>" rel="nofollow">Demo</a>
             <% end %>
+
+            <br>
+            <a onclick="ga('send', 'event', 'Click', 'ProductPage', '<%= product.title %>');" href="/function/<%= product.title.parameterize %>">More Info</a>
           </p>
 
         </div>

@@ -1,6 +1,8 @@
 ---
 ---
 
+<% content_for :title, product.title %>
+
 <section id="products" class="bg-light-gray">
   <div class="container">
     <div class="row">
@@ -48,6 +50,28 @@
           <% end %>
         </p>
 
+        <p>
+          <br>
+          <br>
+          <br>
+
+          <strong>Recommendations</strong>
+          <ul>
+            <% data.solutions.sample(3).each do |p| %>
+              <li>
+                <a onclick="ga('send', 'event', 'Click', 'ProductPageRecommend', '<%= p.title %>');" href="/function/<%= p.title.parameterize %>/"><%= p.title %></a>
+              </li>
+            <% end %>
+          </ul>
+        </p>
+
+        <p>
+          <br>
+          <br>
+          <br>
+          Subscribe to get updates on opsZero and new functions as they are released.
+          <%= partial :subscribe %>
+        </p>
       </div>
     </div>
   </div>
