@@ -1,5 +1,11 @@
 <script>
  var experiments = {
+   "": [
+     function() { },
+     function() {
+       // Package manager for the serverless cloud.
+     }
+   ]
  };
 
  function getExperiment() {
@@ -24,8 +30,8 @@
    return getExperiment();
  }
 
- $.getScript("//www.google-analytics.com/cx/api.js?experiment=" + getExperiment(), function(){
-   chosenVariation = cxApi.chooseVariation();
-   experiments[getExperiment()][chosenVariation]();
- });
+ /* $.getScript("//www.google-analytics.com/cx/api.js?experiment=" + getExperiment(), function(){
+  *   chosenVariation = cxApi.chooseVariation();
+  *   experiments[getExperiment()][chosenVariation]();
+  * });*/
 </script>

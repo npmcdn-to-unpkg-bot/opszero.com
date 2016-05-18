@@ -13,7 +13,7 @@ declare var BridgeAPI: any;
 <h2>Repos</h2>
       <div class="row" *ngFor="#product of products">
         <div class="col-lg-7">
-          <h3><a onclick="ga('send', 'event', 'Click', 'ProductPage', '{{ product.name }}');" href="https://{{ product.repo }}">{{ product.name }}</a></h3>
+          <h3><a onclick="ga('send', 'event', 'Click', 'ProductPage', '{{ product.name }}');" href="https://{{ product.Repo }}">{{ product.name }}</a></h3>
           <p>
             {{ product.description }}
           </p>
@@ -25,7 +25,7 @@ declare var BridgeAPI: any;
 </p>
 
 <p>
-            <a class="btn btn-default" onclick="ga('send', 'event', 'Click', 'Github', '{{ product.name }}');" href="https://{{ product.repo }}"><i class="fa fa-github" aria-hidden="true"></i> Github</a>
+            <a class="btn btn-default" onclick="ga('send', 'event', 'Click', 'Github', '{{ product.name }}');" href="https://{{ product.Repo }}"><i class="fa fa-github" aria-hidden="true"></i> Github</a>
           </p>
         </div>
       </div>
@@ -33,11 +33,9 @@ declare var BridgeAPI: any;
 })
 export class OpsZeroRepos {
     constructor(http: Http) {
-        console.log("foo");
         http.get(BridgeAPI + "/v1/opszero/repos")
             .map(res => res.json())
             .subscribe(products => {
-                console.log(JSON.stringify(products));
                 this.products = products;
             });
     }
