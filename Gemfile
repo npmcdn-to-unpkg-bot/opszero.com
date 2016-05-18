@@ -18,3 +18,5 @@ gem 'org-ruby'
 gem 'redcarpet'
 
 gem 'classifier'
+
+gem "builder", "~> 3.0"

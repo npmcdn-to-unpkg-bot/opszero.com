@@ -8,8 +8,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta name="description" content="<%= current_page.data.description || "" %>">
+    <meta name="description" content="<%= content_for?(:description) ? yield_content(:description) : (current_page.data.description || "") %>">
     <meta name="author" content="Acksin">
+
+    <%= feed_tag :atom, "/feed.xml", title: "opsZero Functions Feed" %>
 
     <title>opsZero by Acksin - <%= content_for?(:title) ? yield_content(:title) : (current_page.data.title || "Home") %></title>
 

@@ -13,6 +13,8 @@ page '/*.json', layout: false
 page '/*.txt', layout: false
 page '/*.css', layout: false
 
+page "/feed.xml", layout: false
+
 page "*", :layout => :layout
 
 data.solutions.each do |product|
