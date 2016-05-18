@@ -51,8 +51,10 @@ code {
 
 @each $product in opszero {
     ##{$product}-header{
-        background-image: image-url('/imgs/#{$product}.jpg');
-        background-size: cover;
+        background-image: image-url('/imgs/#{$product}.png');
+        background-color: white;
+        background-size: contain;
+        background-repeat: no-repeat;
     }
 }
 
