@@ -1,6 +1,6 @@
 ---
-title: Curated and supported serverless apps for AWS Lambda, Google Cloud Functions and Azure Functions.
-description: Curated and supported serverless apps to run in AWS Lambda, Google Cloud Functions and Azure Functions.
+title: Package database for AWS Lambda, Google Cloud Functions and Azure Functions.
+description: NPM for AWS Lambda, Google Cloud Functions and Azure Functions.
 ---
 
 <header>
@@ -31,102 +31,49 @@ description: Curated and supported serverless apps to run in AWS Lambda, Google 
         <%= partial :subscribe %>
       </div>
 
-      <div class="col-lg-6" id="installation">
-        <h2>Installation is Easy</h2>
-
-<code><pre>
-export AWS_ACCESS_KEY_ID=yourkey
-export AWS_SECRET_ACCESS_KEY=yoursecretkey
-unzip -a downloadfile.zip
-make install
-</pre></code>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-<section>
-  <div class="container">
-    <div class="row">
-      <div class="col-lg-6">
+            <div class="col-lg-6">
         <h2>Submit Your Functions</h2>
 
         <p>
-          We are looking for functions to include in our list below
-          and would love for you to submit your functions. We don't
-          take any commission and placement is absolutely free. We
-          just ask that you provide the following:
+          Submit your AWS Lambda functions. Just put the Github repo
+          below. Each repo should have a <code>opszero.json</code> file. Here
+          is an example file.
         </p>
 
-        <ul>
-          <li>README.md or README.org as the documentation</li>
-          <li><a href="https://terraform.io">Terraform</a> script for installation. <a href="https://github.com/opszero/buy-button/blob/master/buy_button.tf">Example.</a></li>
-          <li>Buy button link. We recommend <a href="https://www.sendowl.com?r=acksin">SendOwl</a> or <a href="https://gumroad.com">Gumroad</a>.</li>
+<code><pre>
+{
+    "name": "buy-button",
+    "description": "This is a buy button powered by Stripe.",
+    "tags": ["stripe", "ecommerce"],
+    "license": "MIT",
+    "author": "Abhi Yerra",
+    "email": "abhi@acksin.com",
+    "archive": "output.zip",
+    "buildCommand": "make build",
+    "readme": "README.md",
+    "branch": "master",
+    "aws": {
+        "policyFiles": []
+    }
+}
+</pre></code>
 
-        </ul>
 
-        <form action="/submit">
+        <form method="POST" action="<%= fugue_api_url("/v1/opszero/submit") %>" class="form-inline">
+          github.com/
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="username" name="username" />
+            /
+            <input type="text" class="form-control" placeholder="repo" name="repo" />
+          </div>
           <button onclick="ga('send', 'event', 'Click', 'Submit Your Function', 'Submit Your Function below fold');" class="btn btn-success btn-lg navbar-btn">Submit Your Function</button>
         </form>
       </div>
-
-      <div class="col-lg-6">
-        <h2>Optimize your servers</h2>
-
-        <p>
-          If you are not ready to get rid of your servers check out <a href="https://www.acksin.com/autotune">Acksin Autotune</a> to
-          optimize your machines for performance.
-        </p>
-      </div>
-    </div>
   </div>
 </section>
 
-
 <section id="products" class="bg-light-gray">
   <div class="container">
-    <% data.solutions.each do |product| %>
-      <div class="row">
-        <div class="col-lg-7">
-          <h3><a onclick="ga('send', 'event', 'Click', 'ProductPage', '<%= product.title %>');" href="/function/<%= product.title.parameterize %>"><%= product.title %></a></h3>
-          <p>
-            <%= product.description %>
-          </p>
-        </div>
-
-        <div class="col-lg-4 col-lg-offset-1">
-          <p>
-            <% if !product.buy.nil? && product.buy != "" %>
-              Support by: <%= link_to product.company.name, product.company.url %><br>
-              Support email: <%= product.company.support_email %>
-            <% end %>
-          </p>
-
-          <p>
-            <a href="https://aws.amazon.com/lambda"><i class="fa fa-amazon" aria-hidden="true"></i></a>
-            <% if !product.github.nil? && product.github != "" %>
-              <a class="github-icon-exp" onclick="ga('send', 'event', 'Click', 'Github', '<%= product.title %>');" href="<%= product.github %>"><i class="fa fa-github" aria-hidden="true"></i></a>
-            <% end %>
-          </p>
-
-          <p>
-            <% if !product.buy.nil? && product.buy != "" %>
-              <a onclick="ga('send', 'event', 'Click', 'Buy', '<%= product.title %>');" class="btn btn-lg buy-button btn-danger" href="<%= product.buy %>" rel="nofollow">Buy $<%= product.price %></a>
-            <% end %>
-
-            <% if !product.demo.nil?  && product.demo != "" %>
-              <a  onclick="ga('send', 'event', 'Click', 'Demo', '<%= product.title %>');" class="btn btn-lg btn-default" href="<%= product.demo %>" rel="nofollow">Demo</a>
-            <% end %>
-
-            <br>
-            <a onclick="ga('send', 'event', 'Click', 'ProductPage', '<%= product.title %>');" href="/function/<%= product.title.parameterize %>">More Info</a>
-          </p>
-
-        </div>
-      </div>
-
-    <% end %>
-
+    <opszero-repos>Loading Repos...</opszero-repos>
   </div>
 </section>

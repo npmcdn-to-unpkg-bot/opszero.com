@@ -1,18 +1,10 @@
-#+TITLE: NoOps Solutions
+#+TITLE: opsZero
 
-These are serverless solutions that can be used to run common web
-components of websites. They are powered by [[https://aws.amazon.com/lambda][AWS Lambda]].
-
-* Components
-
- - [[buy_button][Serverless Buy Button Powered By Stripe]]
- - [[mailing_list][Serverless Mailing List]]
+opsZero.com powers the site of the same name.
 
 * License
 
-The components here are licensed under the [[LICENSE][GNU AGPL v3]].
-
-* Commercial License
-
-Acksin sells these components under a commercial friendly license
-which includes one year support and upgrades.
+This Source Code Form is subject to the terms of the Mozilla
+Public License, v.  2.0. If a copy of the MPL was not
+distributed with this file, You can obtain one at
+http://mozilla.org/MPL/2.0/.

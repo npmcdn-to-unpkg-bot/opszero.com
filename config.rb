@@ -17,13 +17,6 @@ page "/feed.xml", layout: false
 
 page "*", :layout => :layout
 
-data.solutions.each do |product|
-  proxy "/function/#{product.title.parameterize}/index.html", "function.html", :locals => { :product => product }, ignore: true
-end
-
-ignore 'function/'
-
-
 # redirect "/support/", to: "/consulting/"
 
 # Proxy pages (http://middlemanapp.com/basics/dynamic-pages/)
@@ -54,6 +47,14 @@ helpers do
 
   def orgmode(source)
     Orgmode::Parser.new(source).to_html
+  end
+
+  def fugue_api_url(path)
+    if build?
+      "https://api.opszero.com#{path}"
+    else
+      "http://nanoyak.com:8080#{path}"
+    end
   end
 end
 
